@@ -1,35 +1,47 @@
 .search-page{
 
 }
-.s_ipt{
-
-}
 .fm{
-    position: absolute;
-    bottom: 0;
+     position: absolute;
+     bottom: 0;
+     margin-top: 0;
 }
+.s_ipt{
+    width: 200px;
+    margin: 0;
+    padding: 9px 7px;
+    font: 16px arial;
+    border: 1px solid #38f;
+    border-bottom: 1px solid #38f;
+    border-right: 0;
+    vertical-align: top;
+    outline: none;
+    box-shadow: none;
+}
+
 .s_ipt_wr{
     display: inline-block;
     zoom: 1;
     vertical-align: top;
+    margin-right: -10px;
+}
+.s_btn{
+    cursor: pointer;
+    line-height: 38px;
+    padding: 0;
+    border: 0;
+    background: none;
+    background-color: #38f;
+    font-size: 16px;
+    color: white;
+    box-shadow: none;
+    font-weight: normal;
 }
 .s_btn_wr{
     border: 1px solid #38f;
-    border-top-color: rgb(51, 136, 255);
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-right-color: rgb(51, 136, 255);
-    border-right-style: solid;
-    border-right-width: 1px;
-    border-bottom-color: rgb(46, 122, 229);
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-left-color: rgb(51, 136, 255);
-    border-left-style: solid;
-    border-left-width: 1px;
     border-bottom: 1px solid #2e7ae5;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(46, 122, 229);
     background-color: #38f;
+    display: inline-block;
+    zoom: 1;
+    vertical-align: top;
 }
