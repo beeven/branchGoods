@@ -1,0 +1,15 @@
+{
+  "globalstrict": true,
+  "globals": {
+    "angular": false,
+    "module": false,
+    "inject": false,
+    "require": false,
+    "define": false
+    },
+    "node": true,
+    "mocha": true,
+    "browser": true,
+    "esnext":true,
+  "expr":true
+}
