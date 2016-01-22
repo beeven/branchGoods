@@ -3,7 +3,7 @@ var angular = require('angular');
 
 var app = angular.module('branchApp', [
     //require('angular-animate'),
-    //require('angular-route'),
+    require('angular-route'),
     require('angular-ui-bootstrap'),
     require('./views/main').name
 ]);
