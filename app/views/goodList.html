@@ -48,13 +48,13 @@
                 </li>
             </ul>
         </div>
-        <div class="pagination">
+        <div class="pagination" ng-show="itemsPerPage > 1">
             <ul>
                 <li ng-class="{disabled: currentPage === 1}" ng-click="prevPage()">
                     <span>&laquo;</span>
                 </li>
                 <li ng-repeat="n in range(itemsPerPage)" ng-class="{active: n === currentPage}" ng-click="setPage()">
-                    <a>{{n}}</a>
+                    <span>{{n}}</span>
                 </li>
                 <li  ng-class="{disabled: currentPage === itemsPerPage}" ng-click="nextPage()">
                     <span>&raquo;</span>
