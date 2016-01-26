@@ -9,6 +9,8 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     $scope.itemsPerPage = 0;
     $scope.hasData = false;
     $scope.item = null;
+    $scope.myInterval = 5000;
+    $scope.noWrapSlides = false;
     /*$scope.goods = [{code:1,name:"test1",img:"",remark:"testtest"},
         {code:2,name:"test2",img:"",remark:"testtest"},
         {code:3,name:"test3",img:"",remark:"testtest"}];*/

@@ -7,25 +7,45 @@
             <h3 class="modal-title">商品详细信息</h3>
         </div>
         <div class="modal-body">
-            <div>
-                <img src="" ng-src="{{item.img}}" class="img-rounded">
-            </div>
-            <div class="form-group">
-                <label for="code" class="col-sm-2">商品编码</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="code" name="code" ng-model="item.code" type="text">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">基本信息</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
+                            <uib-slide ng-repeat="slide in slides" active="slide.active">
+                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                                <div class="carousel-caption">
+                                    <p>{{slide.text}}</p>
+                                </div>
+                            </uib-slide>
+                        </uib-carousel>
+                    </div>
+                    <div class="form-group">
+                        <label for="code" class="col-sm-2">商品编码</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="code" name="code" ng-model="item.code" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2">商品名称</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="name" name="name" ng-model="item.name" type="text">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="name" class="col-sm-2">商品名称</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="name" name="name" ng-model="item.name" type="text">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">商品描述</h3>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="remark" class="col-sm-2">商品描述</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="remark" name="remark" ng-model="item.remark" type="text">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <span>
+                            {{item.remark}}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
