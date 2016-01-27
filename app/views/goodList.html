@@ -10,22 +10,22 @@
             <div>
                 <img src="" ng-src="{{item.img}}" class="img-rounded">
             </div>
-            <div class="form-group">
+            <div class="row">
                 <label for="code" class="col-sm-2">商品编码</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="code" name="code" ng-model="item.code" type="text">
+                <div class="col-sm-6">
+                    <input class="form-control" id="code" name="code" ng-model="item.GOODS_ORDER_NO" type="text">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="row">
                 <label for="name" class="col-sm-2">商品名称</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="name" name="name" ng-model="item.name" type="text">
+                <div class="col-sm-6">
+                    <input class="form-control" id="name" name="name" ng-model="item.G_NAME" type="text">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="row">
                 <label for="remark" class="col-sm-2">商品描述</label>
-                <div class="col-sm-4">
-                    <input class="form-control" id="remark" name="remark" ng-model="item.remark" type="text">
+                <div class="col-sm-6">
+                    <textarea class="form-control" id="remark" name="remark" ng-model="item.GOODS_DESC" rows="3">
                 </div>
             </div>
         </div>
@@ -42,22 +42,22 @@
     <div class="list" ng-show="hasData">
         <div>
             <ul>
-                <li ng-repeat="good in goods" ng-click="open(good.code)">
+                <li ng-repeat="good in goods" ng-click="open(good.CODE_TS)">
                     <img src="" ng-src="{{good.img}}" class="img-thumbnail">
-                    <h2><b>{{good.name}}</b></h2>
+                    <h2><b>{{good.G_NAME}}</b></h2>
                 </li>
             </ul>
         </div>
         <div class="pagination">
             <ul>
-                <li ng-class="{disabled: currentPage === 1}" ng-click="prevPage()">
-                    <span>&laquo;</span>
+                <li ng-class="{disabled: currentPage === 1}">
+                    <button ng-click="prevPage()"><span>&laquo;</span></button>
                 </li>
-                <li ng-repeat="n in range(itemsPerPage)" ng-class="{active: n === currentPage}" ng-click="setPage()">
-                    <a>{{n}}</a>
+                <li ng-repeat="n in range(itemsPerPage)" ng-class="{active: n === currentPage}">
+                    <button ng-click="setPage()">{{n}}</button>
                 </li>
-                <li  ng-class="{disabled: currentPage === itemsPerPage}" ng-click="nextPage()">
-                    <span>&raquo;</span>
+                <li  ng-class="{disabled: currentPage === itemsPerPage}">
+                    <button ng-click="nextPage()"><span>&raquo;</span></button>
                 </li>
             </ul>
         </div>

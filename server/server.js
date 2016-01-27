@@ -7,13 +7,13 @@ var express = require('express'),
     Q = require('q');
 
 app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
-console.log(__dirname + "/../app/");
+//console.log(__dirname + "/../app/");
 app.use(express.static(__dirname+"/../app/"));
 app.use(bodyParser.json());
 
 app.get("/getBranchGoods/:key/:currentPage",function(req,res){
     var key = req.params.key;
-    console.log(key);
+    //console.log(key);
     res.json({code:"0",data:""});
 });
 
@@ -24,3 +24,4 @@ app.get("/getBranchDetail/:objectId",function(req,res){
 
 
 app.listen(3010);
+console.log("Server listening on port 3010");

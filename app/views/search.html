@@ -1,11 +1,16 @@
 <div class="search-page">
-    <form class="fm">
-        <span class="s_ipt_wr">
-            <input class="s_ipt" type="text" ng-model="keyword" id="keyword" name="keyword">
-        </span>
-        <span class="s_btn_wr">
-            <input class="s_btn" type="button" ng-click="search()" value="搜索">
-        </span>
-        <!--<button class="btn btn-success" ng-click="search()">高级搜索</button>-->
-    </form>
+    <div class="warpper">
+        <div class="logo">
+            <img class="s_img" src="./img/logo.png">
+        </div>
+        <form class="fm">
+            <span class="s_ipt_wr">
+                <input class="s_ipt" type="text" ng-model="keyword" id="keyword" name="keyword">
+            </span>
+            <span class="s_btn_wr">
+                <input class="s_btn" type="button" ng-click="search()" value="搜索">
+            </span>
+            <!--<button class="btn btn-success" ng-click="search()">高级搜索</button>-->
+        </form>
+    </div>
 </div>
