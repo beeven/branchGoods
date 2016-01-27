@@ -13,35 +13,41 @@ app.use(bodyParser.json());
 
 var getList = function (key,currentPage,pageCount) {
     var defer = Q.defer();
-    request.get("" + key + "/" + pageCount + "/" + currentPage)
-        .then(function (response) {
-            if(response.body.code === "0"){
-                defer.resolve(response.body.data);
-            }else{
-                defer.reject(response.body.data);
-            }
-        }, function (response) {
+    request.get("http://172.7.1.243:3003/goods/query/" + key + "?pageSize=" + pageCount + "&pageNumber=" + currentPage, function (err, response) {
+        if(!err && response.body.code === "0"){
+            defer.resolve(response.body.data);
+        }else{
             defer.reject("网络异常");
-            console.log("取商品分类列表出错：" + response);
-        });
+            console.log("取商品分类列表出错：" + err);
+        }
+    });
+    return defer.promise;
 };
 
 var getDetail = function (objectId) {
+    var defer = Q.defer();
+    request.get("http://172.7.1.243:3003/goods/details/" + objectId, function (err, response) {
+        if(!err && response.body.code === "0"){
+            defer.resolve(response.body.data);
+        }else{
+            defer.reject("网络异常");
+            console.log("取商品详情出错：" + err);
+        }
+    });
+    return defer.promise;
 };
 
 var getGoodImg = function (objectId) {
     var defer = Q.defer();
-    request.get("" + objectId)
-        .then(function (response) {
-            if(response.body.code === "0"){
-                defer.resolve(response.body.data);
-            }else{
-                defer.reject(response.body.data);
-            }
-        }, function (response) {
+    request.get("http://172.7.1.243:3003/goods/photo/" + objectId, function (err, response) {
+        if(!err && response.body.code === "0"){
+            defer.resolve(response.body.data);
+        }else{
             defer.reject("网络异常");
-            console.log("取商品图片出错：" + response);
-        });
+            console.log("取商品图片出错：" + err);
+        }
+    });
+    return defer.promise;
 };
 
 app.get("/getBranchGoods/:key/:currentPage/:pageCount",function(req,res){
@@ -59,7 +65,13 @@ app.get("/getBranchGoods/:key/:currentPage/:pageCount",function(req,res){
 
 app.get("/getBranchDetail/:objectId",function(req,res){
     var objectId = req.params.objectId;
-    res.json({code:"0",data:""});
+    getDetail(objectId)
+        .then(function (data) {
+            res.send({code:"0",data:data});
+        })
+        .catch(function (err) {
+            res.send({code:"1",err:err});
+        });
 });
 
 app.get("/getGoodPhoto/:objectId", function (req,res) {

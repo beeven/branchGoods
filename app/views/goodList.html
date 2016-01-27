@@ -12,7 +12,7 @@
                     <h3 class="panel-title">基本信息</h3>
                 </div>
                 <div class="panel-body">
-                    <div>
+                    <div class="form-group">
                         <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
                             <uib-slide ng-repeat="slide in slides" active="slide.active">
                                 <img ng-src="{{slide.image}}" style="margin:auto;">
@@ -23,15 +23,18 @@
                         </uib-carousel>
                     </div>
                     <div class="form-group">
-                        <label for="code" class="col-sm-2">商品编码</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" id="code" name="code" ng-model="item.code" type="text">
+                        <div class="col-sm-8">
+                            <span>商品编码：{{item.CODE_TS}}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name" class="col-sm-2">商品名称</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" id="name" name="name" ng-model="item.name" type="text">
+                        <div class="col-sm-8">
+                            <span>商品名称：{{item.G_NAME}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <span>出口税率：{{item.G_NAME}}</span>
                         </div>
                     </div>
                 </div>
@@ -43,7 +46,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <span>
-                            {{item.remark}}
+                            {{item.GOODS_DESC}}
                         </span>
                     </div>
                 </div>
@@ -54,21 +57,27 @@
         </div>
     </script>
     <div class="search">
-        <div class="col-sm-6">
-            <input class="form-control" type="text" ng-model="keyword" id="keyword" name="keyword">
-        </div>
-        <button class="btn btn-success" ng-click="search()">搜索</button>
+        <span class="s_ipt_wr">
+            <input class="s_ipt" type="text" ng-model="keyword" id="keyword" name="keyword">
+        </span>
+        <span class="s_btn_wr">
+            <button class="s_btn" ng-click="search()">搜索</button>
+        </span>
     </div>
     <div class="list" ng-show="hasData">
         <div>
             <ul>
-                <li ng-repeat="good in goods" ng-click="open(good.CODE_TS)">
-                    <img src="" ng-src="{{good.img}}" class="img-thumbnail">
-                    <h2><b>{{good.G_NAME}}</b></h2>
+                <li ng-repeat="good in goods" ng-click="open(good.guid)">
+                    <!--<img src="" ng-src="{{good.img}}" class="img-thumbnail">-->
+                    <h3><b>{{good.G_NAME}}</b></h3>
+                    <span>商品编码：{{good.CODE_TS}}</span>
+                    <span>商品ID：{{good.GOODS_ORDER_NO}}</span>
+                    <span>商品描述：{{good.GOODS_DESC}}</span>
                 </li>
             </ul>
         </div>
-        <div class="pagination" ng-show="itemsPerPage > 1">
+        <tm-pagination conf="paginationConf"></tm-pagination>
+        <!--<div class="pagination" ng-show="itemsPerPage > 1">
             <ul>
                 <li ng-class="{disabled: currentPage === 1}">
                     <button ng-click="prevPage()"><span>&laquo;</span></button>
@@ -80,7 +89,7 @@
                     <button ng-click="nextPage()"><span>&raquo;</span></button>
                 </li>
             </ul>
-        </div>
+        </div>-->
     </div>
     <div class="noData" ng-show="!hasData">
         <label class="col-sm-2">没有数据！</label>

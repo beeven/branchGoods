@@ -24,7 +24,7 @@ app.config(['$routeProvider', function($routeProvider) {
                 redirectTo: '/search'
             });
 }]);
-},{"./views/main":3,"angular":10,"angular-route":6,"angular-ui-bootstrap":8}],2:[function(require,module,exports){
+},{"./views/main":3,"angular":11,"angular-route":7,"angular-ui-bootstrap":9}],2:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
@@ -34,24 +34,29 @@ var m = angular.module('branchApp.goods');
 m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams){
     $scope.currentPage = 1;
     $scope.itemsPerPage = 0;
-    $scope.hasData = false;
+    $scope.hasData = true;
     $scope.item = null;
-    $scope.myInterval = 5000;
-    $scope.noWrapSlides = false;
+
+    $scope.paginationConf = {
+        currentPage: 1,
+        totalItems: 0,
+        itemsPerPage: 10,
+        pagesLength: 9,
+        perPageOptions: [10, 20, 30]
+    };
     /*$scope.goods = [{code:1,name:"test1",img:"",remark:"testtest"},
         {code:2,name:"test2",img:"",remark:"testtest"},
         {code:3,name:"test3",img:"",remark:"testtest"}];*/
     var keyword = $routeParams.keyword;
     var getGoodList = function (key, page) {
-        $http.get("http://localhost:3010/getBranchGoods/" + key+ "/" + page)
+        $http.get("http://localhost:3010/getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.pagesLength)
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === "0"){
-                    //$scope.goods = response.data.goods;
-                    console.log("test1");
-                    $scope.goods = [{"GOODS_ORDER_NO":"4200001235","CODE_TS":"2907121100","G_NAME":"间甲酚（m-cresol;m-hydroxytoluene;m-methylphenol）","GOODS_DESC":"无色或淡黄色可燃液体, 有苯酚的气味, 在空气中遇光逐渐变色。密度(20)1.0344, 熔点10.9℃, 沸点202.8℃, 闪点94.44℃, 自燃点558.9℃；溶于约40倍的水，溶于苛性碱液和常用有机溶剂。\r\n用途：用于消毒剂、油漆、农药等, 也是电影胶片的重要原料。并可用以制造树脂、增塑剂和香料等。\r\n"},
-                                    {"GOODS_ORDER_NO":"4200001236","CODE_TS":"2907121900","G_NAME":"对甲酚（p-cresol;p-hydroxytoluene;p-methylphenol）","GOODS_DESC":"    无色结晶块状物，有苯酚的气味,可燃，CAS 号：106-44-5 ；分子量 108.14 ；密度(20)1.034, 熔点35.5℃, 沸点201.88℃, 闪点94.44℃, 自燃点558.9℃。水中溶解度40℃时达2.3%，100℃时达5%，溶于苛性碱液和常用有机溶剂。\r\n用途：制造防老剂264和橡胶防老剂的原料。在塑料工业中可制造酚醛树脂和增塑剂。在医药上用作消毒剂，还可作染料和农药的原料。"}];
-                    $scope.itemsPerPage = 5;//response.data.itemsPerPage;
+                    $scope.goods = response.data.goods;
+                    $scope.paginationConf.totalItems = response.data.count;
+                    //$scope.goods = [{"guid":"1234","GOODS_ORDER_NO":"4200001235","CODE_TS":"2907121100","G_NAME":"间甲酚（m-cresol;m-hydroxytoluene;m-methylphenol）","GOODS_DESC":"无色或淡黄色可燃液体, 有苯酚的气味, 在空气中遇光逐渐变色。密度(20)1.0344, 熔点10.9℃, 沸点202.8℃, 闪点94.44℃, 自燃点558.9℃；溶于约40倍的水，溶于苛性碱液和常用有机溶剂。\r\n用途：用于消毒剂、油漆、农药等, 也是电影胶片的重要原料。并可用以制造树脂、增塑剂和香料等。\r\n"},
+                    //                {"guid":"1235","GOODS_ORDER_NO":"4200001236","CODE_TS":"2907121900","G_NAME":"对甲酚（p-cresol;p-hydroxytoluene;p-methylphenol）","GOODS_DESC":"    无色结晶块状物，有苯酚的气味,可燃，CAS 号：106-44-5 ；分子量 108.14 ；密度(20)1.034, 熔点35.5℃, 沸点201.88℃, 闪点94.44℃, 自燃点558.9℃。水中溶解度40℃时达2.3%，100℃时达5%，溶于苛性碱液和常用有机溶剂。\r\n用途：制造防老剂264和橡胶防老剂的原料。在塑料工业中可制造酚醛树脂和增塑剂。在医药上用作消毒剂，还可作染料和农药的原料。"}];
                     $scope.hasData = true;
                 }else{
                     $scope.hasData = false;
@@ -61,21 +66,21 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
             });
     };
 
-    /*var getGoodDetail = function (code) {
+    var getGoodDetail = function (code) {
         $http.get("http://localhost:3010/getBranchDetail/" + code)
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === "0"){
                     $scope.item = {code:1,name:"test1",img:"",remark:"testtest"};//response.data.data;
                 }else{
-                    return false;
+                    return null;
                 }
             }, function () {
-                return false;
+                return null;
             });
-    };*/
+    };
 
-    $scope.range = function (start, end) {
+    /*$scope.range = function (start, end) {
         var ret = [];
         if (!end) {
             end = start;
@@ -85,9 +90,9 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
             ret.push(i);
         }
         return ret;
-    };
+    };*/
 
-    $scope.prevPage = function () {
+    /*$scope.prevPage = function () {
         if ($scope.currentPage > 1) {
             $scope.currentPage--;
             console.log($scope.currentPage);
@@ -103,58 +108,65 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
 
     $scope.setPage = function () {
         $scope.currentPage = this.n;
-    };
+        console.log($scope.currentPage);
+    };*/
 
     $scope.open = function (code) {
-
-        $http.get("http://localhost:3010/getBranchGoods/" + keyword + "/" + $scope.currentPage)
-            .then(function(response){
-                if(response.data.code === "0") {
-                    $scope.item = {"GOODS_ORDER_NO":"4200001235","CODE_TS":"2907121100","G_NAME":"间甲酚（m-cresol;m-hydroxytoluene;m-methylphenol）","GOODS_DESC":"无色或淡黄色可燃液体, 有苯酚的气味, 在空气中遇光逐渐变色。密度(20)1.0344, 熔点10.9℃, 沸点202.8℃, 闪点94.44℃, 自燃点558.9℃；溶于约40倍的水，溶于苛性碱液和常用有机溶剂。\r\n用途：用于消毒剂、油漆、农药等, 也是电影胶片的重要原料。并可用以制造树脂、增塑剂和香料等。\r\n"};
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'myModalContent.html',
-                        controller: 'ModalInstanceCtrl',
-                        size: 'lg',
-                        resolve: {
-                            item: function () {
-                                return $scope.item;
-                            }
-                        }
-                    });
-                }else{
-                    return null;
+        $scope.item = getGoodDetail(code);
+        var modalInstance = $uibModal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalInstanceCtrl',
+            size: 'lg',
+            resolve: {
+                item: function () {
+                    return $scope.item;
                 }
-            },function(){
-                return null;
-            });
+            }
+        });
     };
 
     $scope.search = function(){
         getGoodList($scope.keyword,1);
     };
 
-    $scope.$watch('currentPage', getGoodList(keyword, $scope.currentPage));
+    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getGoodList(keyword, $scope.paginationConf.currentPage));
 });
 
-m.controller('ModalInstanceCtrl',function ($scope, $uibModalInstance, item) {
-
+m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, item) {
+    $scope.myInterval = 5000;
+    $scope.noWrapSlides = false;
     $scope.item = item;
     console.log(item);
+
+    var getGoodPhoto = function () {
+        $http.get("http://localhost:3010/getGoodPhoto/" + item.guid)
+            .then(function (response) {
+                if(response.data.code === "0"){
+                    $scope.slides = response.data.photos;
+                }else{
+                    console.log(response);
+                }
+            }, function (response) {
+                console.log(response);
+            });
+    };
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
+    $scope.$watch('item', getGoodPhoto);
 });
-},{"angular":10}],3:[function(require,module,exports){
+},{"angular":11}],3:[function(require,module,exports){
 
 
 var angular = require("angular");
 
-module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap')]);
+module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap'),require("./../widget/pagination").name]);
 
 require('./search');
 require('./goodList');
-},{"./goodList":2,"./search":4,"angular":10,"angular-ui-bootstrap":8}],4:[function(require,module,exports){
+},{"./../widget/pagination":5,"./goodList":2,"./search":4,"angular":11,"angular-ui-bootstrap":9}],4:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
@@ -171,7 +183,179 @@ m.controller('search.MainCtrl',function ($scope,$location) {
         $scope.url = $location.url();
     };
 });
-},{"angular":10}],5:[function(require,module,exports){
+},{"angular":11}],5:[function(require,module,exports){
+var angular = require("angular");
+
+module.exports = angular.module('tm.pagination',[]).directive('tmPagination',[function(){
+    return {
+        restrict: 'EA',
+        template: '<div class="page-list">' +
+        '<ul class="pagination" ng-show="conf.numberOfPages > 1">' +
+        '<li class="page-item" ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
+        '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.currentPage, separate: item == \'...\'}" ' +
+        'ng-click="changeCurrentPage(item)">' +
+        '<span>{{ item }}</span>' +
+        '</li>' +
+        '<li ng-class="{disabled: conf.currentPage == conf.numberOfPages}" ng-click="nextPage()"><span>&raquo;</span></li>' +
+        '</ul>' +
+        '<div class="page-total" ng-show="conf.numberOfPages > 1">' +
+        '第<input type="text" ng-model="jumpPageNum"  ng-keyup="jumpToPage($event)"/>页 ' +
+        '每页<select ng-model="conf.itemsPerPage" ng-options="option for option in conf.perPageOptions "></select>' +
+        '/共<strong>{{ conf.totalItems }}</strong>条' +
+        '</div>',
+        replace: true,
+        scope: {
+            conf: '='
+        },
+        link: function(scope, element, attrs){
+
+            // 变更当前页
+            scope.changeCurrentPage = function(item) {
+                if(item === '...'){
+                    return;
+                }else{
+                    scope.conf.currentPage = item;
+                }
+            };
+
+            // 定义分页的长度必须为奇数 (default:9)
+            scope.conf.pagesLength = parseInt(scope.conf.pagesLength) ? parseInt(scope.conf.pagesLength) : 9 ;
+            if(scope.conf.pagesLength % 2 === 0){
+                // 如果不是奇数的时候处理一下
+                scope.conf.pagesLength = scope.conf.pagesLength -1;
+            }
+
+            // conf.erPageOptions
+            if(!scope.conf.perPageOptions){
+                scope.conf.perPageOptions = [10, 15, 20, 30, 50];
+            }
+
+            // pageList数组
+            function getPagination(newValue, oldValue) {
+                // conf.currentPage
+                scope.conf.currentPage = parseInt(scope.conf.currentPage) ? parseInt(scope.conf.currentPage) : 1;
+                // conf.totalItems
+                scope.conf.totalItems = parseInt(scope.conf.totalItems) ? parseInt(scope.conf.totalItems) : 0;
+                // conf.itemsPerPage (default:15)
+                scope.conf.itemsPerPage = parseInt(scope.conf.itemsPerPage) ? parseInt(scope.conf.itemsPerPage) : 15;
+                // numberOfPages
+                scope.conf.numberOfPages = Math.ceil(scope.conf.totalItems/scope.conf.itemsPerPage);
+
+                // judge currentPage > scope.numberOfPages
+                if(scope.conf.currentPage < 1){
+                    scope.conf.currentPage = 1;
+                }
+
+                // 如果分页总数>0，并且当前页大于分页总数
+                if(scope.conf.numberOfPages > 0 && scope.conf.currentPage > scope.conf.numberOfPages){
+                    scope.conf.currentPage = scope.conf.numberOfPages;
+                }
+
+                // jumpPageNum
+                scope.jumpPageNum = scope.conf.currentPage;
+
+                // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
+                var perPageOptionsLength = scope.conf.perPageOptions.length;
+                // 定义状态
+                var perPageOptionsStatus;
+                for(var i = 0; i < perPageOptionsLength; i++){
+                    if(scope.conf.perPageOptions[i] === scope.conf.itemsPerPage){
+                        perPageOptionsStatus = true;
+                    }
+                }
+                // 如果itemsPerPage在不在perPageOptions数组中，就把itemsPerPage加入这个数组中
+                if(!perPageOptionsStatus){
+                    scope.conf.perPageOptions.push(scope.conf.itemsPerPage);
+                }
+
+                // 对选项进行sort
+                scope.conf.perPageOptions.sort(function(a, b){return a-b});
+
+                scope.pageList = [];
+                if(scope.conf.numberOfPages <= scope.conf.pagesLength){
+                    // 判断总页数如果小于等于分页的长度，若小于则直接显示
+                    for(i =1; i <= scope.conf.numberOfPages; i++){
+                        scope.pageList.push(i);
+                    }
+                }else{
+                    // 总页数大于分页长度（此时分为三种情况：1.左边没有...2.右边没有...3.左右都有...）
+                    // 计算中心偏移量
+                    var offset = (scope.conf.pagesLength - 1)/2;
+                    if(scope.conf.currentPage <= offset){
+                        // 左边没有...
+                        for(i =1; i <= offset +1; i++){
+                            scope.pageList.push(i);
+                        }
+                        scope.pageList.push('...');
+                        scope.pageList.push(scope.conf.numberOfPages);
+                    }else if(scope.conf.currentPage > scope.conf.numberOfPages - offset){
+                        scope.pageList.push(1);
+                        scope.pageList.push('...');
+                        for(i = offset + 1; i >= 1; i--){
+                            scope.pageList.push(scope.conf.numberOfPages - i);
+                        }
+                        scope.pageList.push(scope.conf.numberOfPages);
+                    }else{
+                        // 最后一种情况，两边都有...
+                        scope.pageList.push(1);
+                        scope.pageList.push('...');
+
+                        for(i = Math.ceil(offset/2) ; i >= 1; i--){
+                            scope.pageList.push(scope.conf.currentPage - i);
+                        }
+                        scope.pageList.push(scope.conf.currentPage);
+                        for(i = 1; i <= offset/2; i++){
+                            scope.pageList.push(scope.conf.currentPage + i);
+                        }
+
+                        scope.pageList.push('...');
+                        scope.pageList.push(scope.conf.numberOfPages);
+                    }
+                }
+
+                if(scope.conf.onChange){
+                    // 防止初始化两次请求问题
+                    if(!(oldValue !== newValue && oldValue[0] === 0)) {
+                        scope.conf.onChange();
+                    }
+
+                }
+                scope.$parent.conf = scope.conf;
+            }
+
+            // prevPage
+            scope.prevPage = function(){
+                if(scope.conf.currentPage > 1){
+                    scope.conf.currentPage -= 1;
+                }
+            };
+            // nextPage
+            scope.nextPage = function(){
+                if(scope.conf.currentPage < scope.conf.numberOfPages){
+                    scope.conf.currentPage += 1;
+                }
+            };
+
+            // 跳转页
+            scope.jumpToPage = function(){
+                scope.jumpPageNum = scope.jumpPageNum.replace(/[^0-9]/g,'');
+                if(scope.jumpPageNum !== ''){
+                    scope.conf.currentPage = scope.jumpPageNum;
+                }
+            };
+
+            scope.$watch(function() {
+                if(!scope.conf.totalItems) {
+                    scope.conf.totalItems = 0;
+                }
+                var newValue = scope.conf.totalItems + ' ' +  scope.conf.currentPage + ' ' + scope.conf.itemsPerPage;
+                return newValue;
+            }, getPagination);
+
+        }
+    };
+}]);
+},{"angular":11}],6:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1164,11 +1348,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":5}],7:[function(require,module,exports){
+},{"./angular-route":6}],8:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -8050,12 +8234,12 @@ angular.module('ui.bootstrap.carousel').run(function() {!angular.$$csp().noInlin
 angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">.uib-datepicker .uib-title{width:100%;}.uib-day button,.uib-month button,.uib-year button{min-width:100%;}.uib-datepicker-popup.dropdown-menu{display:block;}.uib-button-bar{padding:10px 9px 2px;}</style>'); });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); });
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":7}],9:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":8}],10:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37074,8 +37258,8 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":9}]},{},[1]);
+},{"./angular":10}]},{},[1]);

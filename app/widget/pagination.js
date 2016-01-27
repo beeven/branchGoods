@@ -1,16 +1,18 @@
-angular.module('pagination', []).directive('Pagination',[function(){
+var angular = require("angular");
+
+module.exports = angular.module('tm.pagination',[]).directive('tmPagination',[function(){
     return {
         restrict: 'EA',
         template: '<div class="page-list">' +
-        '<ul class="pagination" ng-show="conf.totalItems > 0">' +
-        '<li ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
+        '<ul class="pagination" ng-show="conf.numberOfPages > 1">' +
+        '<li class="page-item" ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
         '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.currentPage, separate: item == \'...\'}" ' +
         'ng-click="changeCurrentPage(item)">' +
         '<span>{{ item }}</span>' +
         '</li>' +
         '<li ng-class="{disabled: conf.currentPage == conf.numberOfPages}" ng-click="nextPage()"><span>&raquo;</span></li>' +
         '</ul>' +
-        '<div class="page-total" ng-show="conf.totalItems > 0">' +
+        '<div class="page-total" ng-show="conf.numberOfPages > 1">' +
         '第<input type="text" ng-model="jumpPageNum"  ng-keyup="jumpToPage($event)"/>页 ' +
         '每页<select ng-model="conf.itemsPerPage" ng-options="option for option in conf.perPageOptions "></select>' +
         '/共<strong>{{ conf.totalItems }}</strong>条' +
@@ -23,7 +25,7 @@ angular.module('pagination', []).directive('Pagination',[function(){
 
             // 变更当前页
             scope.changeCurrentPage = function(item) {
-                if(item == '...'){
+                if(item === '...'){
                     return;
                 }else{
                     scope.conf.currentPage = item;
@@ -71,7 +73,7 @@ angular.module('pagination', []).directive('Pagination',[function(){
                 // 定义状态
                 var perPageOptionsStatus;
                 for(var i = 0; i < perPageOptionsLength; i++){
-                    if(scope.conf.perPageOptions[i] == scope.conf.itemsPerPage){
+                    if(scope.conf.perPageOptions[i] === scope.conf.itemsPerPage){
                         perPageOptionsStatus = true;
                     }
                 }
@@ -127,7 +129,7 @@ angular.module('pagination', []).directive('Pagination',[function(){
 
                 if(scope.conf.onChange){
                     // 防止初始化两次请求问题
-                    if(!(oldValue != newValue && oldValue[0] == 0)) {
+                    if(!(oldValue !== newValue && oldValue[0] === 0)) {
                         scope.conf.onChange();
                     }
 
