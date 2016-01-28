@@ -6,7 +6,8 @@ var app = angular.module('branchApp', [
     //require('angular-animate'),
     require('angular-route'),
     require('angular-ui-bootstrap'),
-    require('./views/main').name
+    require('./views/main').name,
+    require('./../node_modules/angular-busy/dist/angular-busy.min').name
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -24,7 +25,7 @@ app.config(['$routeProvider', function($routeProvider) {
                 redirectTo: '/search'
             });
 }]);
-},{"./views/main":3,"angular":12,"angular-route":8,"angular-ui-bootstrap":10}],2:[function(require,module,exports){
+},{"./../node_modules/angular-busy/dist/angular-busy.min":6,"./views/main":3,"angular":12,"angular-route":8,"angular-ui-bootstrap":10}],2:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
