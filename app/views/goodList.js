@@ -87,16 +87,18 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     };*/
 
     $scope.open = function (code) {
-        $scope.item = getGoodDetail(code);
-        var modalInstance = $uibModal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: 'lg',
-            resolve: {
-                item: function () {
-                    return $scope.item;
+        getGoodDetail(code).then(function (data) {
+            $scope.item = data;
+            var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: 'lg',
+                resolve: {
+                    item: function () {
+                        return $scope.item;
+                    }
                 }
-            }
+            });
         });
     };
 
