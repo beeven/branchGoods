@@ -4,7 +4,7 @@ var angular = require("angular");
 
 var m = angular.module('branchApp.goods');
 
-m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams){
+m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams, $q){
     $scope.currentPage = 1;
     $scope.itemsPerPage = 0;
     $scope.hasData = true;
@@ -42,16 +42,17 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     };
 
     var getGoodDetail = function (code) {
+        var defer = $q.defer();
         $http.get("./getBranchDetail/" + code)
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === 0){
-                    return response.data.data;
+                    defer.resolve(response.data.data);
                 }else{
-                    return null;
+                    defer.reject();
                 }
             }, function () {
-                return null;
+                defer.reject();
             });
     };
 
