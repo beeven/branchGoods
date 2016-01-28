@@ -17,8 +17,9 @@ var getList = function (key,currentPage,pageCount) {
     console.log(key);
     request.get("http://172.7.1.243:3003/goods/query/" + key + "?pageSize=" + pageCount + "&pageNumber=" + currentPage, function (err, response) {
         console.log(response.body);
-        if(!err && response.body.code === 0){
-            defer.resolve(response.body.data);
+        var body = JSON.parser(response.body);
+        if(!err && body.code === 0){
+            defer.resolve(body.data);
         }else{
             defer.reject("网络异常");
             console.log("取商品分类列表出错：" + err);
@@ -30,8 +31,9 @@ var getList = function (key,currentPage,pageCount) {
 var getDetail = function (objectId) {
     var defer = Q.defer();
     request.get("http://172.7.1.243:3003/goods/details/" + objectId, function (err, response) {
-        if(!err && response.body.code === 0){
-            defer.resolve(response.body.data);
+        var body = JSON.parser(response.body);
+        if(!err && body.code === 0){
+            defer.resolve(body.data);
         }else{
             defer.reject("网络异常");
             console.log("取商品详情出错：" + err);
@@ -40,10 +42,11 @@ var getDetail = function (objectId) {
     return defer.promise;
 };
 
-var getGoodImg = function (objectId) {
+/*var getGoodImg = function (objectId) {
+
     var defer = Q.defer();
-    request.get("http://172.7.1.243:3003/goods/photo/" + objectId, function (err, response) {
-        if(!err && response.body.code === 0){
+    request.get("http://172.7.1.243:3003/goods/photo/" + objectId).pipe(res) {
+        if(!err){
             defer.resolve(response.body.data);
         }else{
             defer.reject("网络异常");
@@ -51,7 +54,7 @@ var getGoodImg = function (objectId) {
         }
     });
     return defer.promise;
-};
+};*/
 
 app.get("/getBranchGoods/:key/:currentPage/:pageCount",function(req,res){
     var key = req.params.key;
@@ -79,13 +82,14 @@ app.get("/getBranchDetail/:objectId",function(req,res){
 
 app.get("/getGoodPhoto/:objectId", function (req,res) {
     var objectId = req.params.objectId;
-    getGoodImg(objectId)
+    request.get("http://172.7.1.243:3003/goods/photo/" + objectId).pipe(res);
+    /*getGoodImg(objectId)
         .then(function (data) {
             res.send({code:0,data:data});
         })
         .catch(function (err) {
             res.send({code:1,err:err});
-        });
+        });*/
 });
 
 
