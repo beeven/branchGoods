@@ -17,7 +17,7 @@ var getList = function (key,currentPage,pageCount) {
     console.log(key);
     request.get("http://172.7.1.243:3003/goods/query/" + key + "?pageSize=" + pageCount + "&pageNumber=" + currentPage, function (err, response) {
         console.log(response.body);
-        var body = JSON.parser(response.body);
+        var body = JSON.parse(response.body);
         if(!err && body.code === 0){
             defer.resolve(body.data);
         }else{
@@ -31,7 +31,7 @@ var getList = function (key,currentPage,pageCount) {
 var getDetail = function (objectId) {
     var defer = Q.defer();
     request.get("http://172.7.1.243:3003/goods/details/" + objectId, function (err, response) {
-        var body = JSON.parser(response.body);
+        var body = JSON.parse(response.body);
         if(!err && body.code === 0){
             defer.resolve(body.data);
         }else{
