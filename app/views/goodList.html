@@ -33,8 +33,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="col-sm-4">
+                            进口最惠国税率：<span>{{item.LOW_RATE}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            进口增值税率：<span>{{item.TAX_RATE}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            出口(暂定)税率：<span ng-show="item.REG_RATE != 0">{{item.REG_RATE}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            出口退税率：<span ng-show="item.OUT_RATE != 0">{{item.OUT_RATE}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-sm-8">
-                            <span>出口税率：{{item.TAX_RATE}}</span>
+                            <span>规范申报要素：{{item.HS_POINTS}}</span>
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         {code:3,name:"test3",img:"",remark:"testtest"}];*/
     var keyword = $routeParams.keyword;
     var getGoodList = function (key, page) {
-        $http.get("./getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.pagesLength)
+        $http.get("./getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.itemsPerPage)
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === "0"){
@@ -44,7 +44,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === "0"){
-                    $scope.item = response.data.data;
+                    return response.data.data;
                 }else{
                     return null;
                 }
