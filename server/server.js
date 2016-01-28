@@ -13,7 +13,10 @@ app.use(bodyParser.json());
 
 var getList = function (key,currentPage,pageCount) {
     var defer = Q.defer();
+    key = decodeURIComponent(key);
+    console.log(key);
     request.get("http://172.7.1.243:3003/goods/query/" + key + "?pageSize=" + pageCount + "&pageNumber=" + currentPage, function (err, response) {
+        console.log(response.body);
         if(!err && response.body.code === "0"){
             defer.resolve(response.body.data);
         }else{

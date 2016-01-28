@@ -9,6 +9,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     $scope.itemsPerPage = 0;
     $scope.hasData = true;
     $scope.item = null;
+    $scope.keyword = $routeParams.keyword;
 
     $scope.paginationConf = {
         currentPage: 1,
@@ -20,8 +21,9 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     /*$scope.goods = [{code:1,name:"test1",img:"",remark:"testtest"},
         {code:2,name:"test2",img:"",remark:"testtest"},
         {code:3,name:"test3",img:"",remark:"testtest"}];*/
-    var keyword = $routeParams.keyword;
+    //var keyword = $routeParams.keyword;
     var getGoodList = function (key, page) {
+        key = encodeURIComponent(key);
         $http.get("./getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.itemsPerPage)
             .then(function (response) {
                 console.log(response);
@@ -102,7 +104,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         getGoodList($scope.keyword,1);
     };
 
-    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getGoodList(keyword, $scope.paginationConf.currentPage));
+    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getGoodList($scope.keyword, $scope.paginationConf.currentPage));
 });
 
 m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, item) {
