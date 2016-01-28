@@ -81,6 +81,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
             }, function () {
                 defer.reject();
             });
+        return defer.promise;
     };
 
     /*$scope.range = function (start, end) {
