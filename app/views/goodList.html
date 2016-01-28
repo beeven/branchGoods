@@ -83,11 +83,13 @@
     <div class="list" ng-show="hasData">
         <div>
             <ul>
-                <li ng-repeat="good in goods" ng-click="open(good.GOODS_ID)">
-                    <!--<img src="" ng-src="{{good.img}}" class="img-thumbnail">-->
-                    <h3><b>{{good.G_NAME}}</b></h3>
-                    <span>商品编码：{{good.CODE_TS}}</span>
-                    <span>商品描述：{{good.GOODS_DESC}}</span>
+                <li ng-repeat="good in goods">
+                    <a ng-click="open(good.GOODS_ID)">
+                        <h3><b>{{good.G_NAME}}</b></h3>
+                        <!--<img src="" ng-src="{{good.img}}" class="img-thumbnail">-->
+                        <span>商品编码：{{good.CODE_TS}}</span>
+                        <span>商品描述：{{good.GOODS_DESC}}</span>
+                    </a>
                 </li>
             </ul>
         </div>
