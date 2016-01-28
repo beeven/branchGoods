@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 
 var getList = function (key,currentPage,pageCount) {
     var defer = Q.defer();
-    key = decodeURIComponent(key);
+    key = encodeURIComponent(key);
     console.log(key);
     request.get("http://172.7.1.243:3003/goods/query/" + key + "?pageSize=" + pageCount + "&pageNumber=" + currentPage, function (err, response) {
         console.log(response.body);
-        if(!err && response.body.code === "0"){
+        if(!err && response.body.code === 0){
             defer.resolve(response.body.data);
         }else{
             defer.reject("网络异常");
@@ -30,7 +30,7 @@ var getList = function (key,currentPage,pageCount) {
 var getDetail = function (objectId) {
     var defer = Q.defer();
     request.get("http://172.7.1.243:3003/goods/details/" + objectId, function (err, response) {
-        if(!err && response.body.code === "0"){
+        if(!err && response.body.code === 0){
             defer.resolve(response.body.data);
         }else{
             defer.reject("网络异常");
@@ -43,7 +43,7 @@ var getDetail = function (objectId) {
 var getGoodImg = function (objectId) {
     var defer = Q.defer();
     request.get("http://172.7.1.243:3003/goods/photo/" + objectId, function (err, response) {
-        if(!err && response.body.code === "0"){
+        if(!err && response.body.code === 0){
             defer.resolve(response.body.data);
         }else{
             defer.reject("网络异常");
@@ -59,10 +59,10 @@ app.get("/getBranchGoods/:key/:currentPage/:pageCount",function(req,res){
     var pageCount = req.params.pageCount;
     getList(key,currentPage,pageCount)
         .then(function (data) {
-            res.send({code:"0",data:data});
+            res.send({code:0,data:data});
         })
         .catch(function (err) {
-            res.send({code:"1",err:err});
+            res.send({code:1,err:err});
         });
 });
 
@@ -70,10 +70,10 @@ app.get("/getBranchDetail/:objectId",function(req,res){
     var objectId = req.params.objectId;
     getDetail(objectId)
         .then(function (data) {
-            res.send({code:"0",data:data});
+            res.send({code:0,data:data});
         })
         .catch(function (err) {
-            res.send({code:"1",err:err});
+            res.send({code:1,err:err});
         });
 });
 
@@ -81,10 +81,10 @@ app.get("/getGoodPhoto/:objectId", function (req,res) {
     var objectId = req.params.objectId;
     getGoodImg(objectId)
         .then(function (data) {
-            res.send({code:"0",data:data});
+            res.send({code:0,data:data});
         })
         .catch(function (err) {
-            res.send({code:"1",err:err});
+            res.send({code:1,err:err});
         });
 });
 

@@ -27,7 +27,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         $http.get("./getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.itemsPerPage)
             .then(function (response) {
                 console.log(response);
-                if(response.data.code === "0"){
+                if(response.data.code === 0){
                     $scope.goods = response.data.data;
                     $scope.paginationConf.totalItems = response.data.count;
                     //$scope.goods = [{"guid":"1234","GOODS_ORDER_NO":"4200001235","CODE_TS":"2907121100","G_NAME":"间甲酚（m-cresol;m-hydroxytoluene;m-methylphenol）","GOODS_DESC":"无色或淡黄色可燃液体, 有苯酚的气味, 在空气中遇光逐渐变色。密度(20)1.0344, 熔点10.9℃, 沸点202.8℃, 闪点94.44℃, 自燃点558.9℃；溶于约40倍的水，溶于苛性碱液和常用有机溶剂。\r\n用途：用于消毒剂、油漆、农药等, 也是电影胶片的重要原料。并可用以制造树脂、增塑剂和香料等。\r\n"},
@@ -45,7 +45,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         $http.get("./getBranchDetail/" + code)
             .then(function (response) {
                 console.log(response);
-                if(response.data.code === "0"){
+                if(response.data.code === 0){
                     return response.data.data;
                 }else{
                     return null;
