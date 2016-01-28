@@ -109,7 +109,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         getGoodList($scope.keyword,1);
     };
 
-    $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getGoodList($scope.keyword, $scope.paginationConf.currentPage));
+    $scope.$watch('conf.currentPage + conf.itemsPerPage', getGoodList($scope.keyword, $scope.conf.currentPage));
 });
 
 m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, item) {
