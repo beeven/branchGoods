@@ -14,10 +14,10 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
-                            <uib-slide ng-repeat="slide in slides" active="slide.active">
-                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                            <uib-slide ng-repeat="slide in item.THUMBNAILS" active="slide.active">
+                                <img ng-src="{{slide.DATA}}" style="margin:auto;">
                                 <div class="carousel-caption">
-                                    <p>{{slide.text}}</p>
+                                    <p>{{slide.TITLE }}</p>
                                 </div>
                             </uib-slide>
                         </uib-carousel>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-8">
-                            <span>出口税率：{{item.G_NAME}}</span>
+                            <span>出口税率：{{item.TAX_RATE}}</span>
                         </div>
                     </div>
                 </div>
@@ -67,11 +67,10 @@
     <div class="list" ng-show="hasData">
         <div>
             <ul>
-                <li ng-repeat="good in goods" ng-click="open(good.guid)">
+                <li ng-repeat="good in goods" ng-click="open(good.GOODS_ID)">
                     <!--<img src="" ng-src="{{good.img}}" class="img-thumbnail">-->
                     <h3><b>{{good.G_NAME}}</b></h3>
                     <span>商品编码：{{good.CODE_TS}}</span>
-                    <span>商品ID：{{good.GOODS_ORDER_NO}}</span>
                     <span>商品描述：{{good.GOODS_DESC}}</span>
                 </li>
             </ul>
