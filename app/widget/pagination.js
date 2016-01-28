@@ -5,7 +5,7 @@ module.exports = angular.module('tm.pagination',[]).directive('tmPagination',[fu
         restrict: 'EA',
         template: '<div class="page-list">' +
         '<ul class="pagination" ng-show="conf.numberOfPages > 1">' +
-        '<li class="page-item" ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
+        '<li ng-class="{disabled: conf.currentPage == 1}" ng-click="prevPage()"><span>&laquo;</span></li>' +
         '<li ng-repeat="item in pageList track by $index" ng-class="{active: item == conf.currentPage, separate: item == \'...\'}" ' +
         'ng-click="changeCurrentPage(item)">' +
         '<span>{{ item }}</span>' +
