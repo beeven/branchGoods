@@ -24,7 +24,7 @@ app.config(['$routeProvider', function($routeProvider) {
                 redirectTo: '/search'
             });
 }]);
-},{"./views/main":3,"angular":11,"angular-route":7,"angular-ui-bootstrap":9}],2:[function(require,module,exports){
+},{"./views/main":3,"angular":12,"angular-route":8,"angular-ui-bootstrap":10}],2:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
@@ -170,16 +170,16 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
 
     //$scope.$watch('item', getGoodPhoto);
 });
-},{"angular":11}],3:[function(require,module,exports){
+},{"angular":12}],3:[function(require,module,exports){
 
 
 var angular = require("angular");
 
-module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap'),require("./../widget/pagination").name]);
+module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap'),require('angular-busy').name,require("./../widget/pagination").name]);
 
 require('./search');
 require('./goodList');
-},{"./../widget/pagination":5,"./goodList":2,"./search":4,"angular":11,"angular-ui-bootstrap":9}],4:[function(require,module,exports){
+},{"./../widget/pagination":5,"./goodList":2,"./search":4,"angular":12,"angular-busy":6,"angular-ui-bootstrap":10}],4:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
@@ -196,7 +196,7 @@ m.controller('search.MainCtrl',function ($scope,$location) {
         $scope.url = $location.url();
     };
 });
-},{"angular":11}],5:[function(require,module,exports){
+},{"angular":12}],5:[function(require,module,exports){
 var angular = require("angular");
 
 module.exports = angular.module('tm.pagination',[]).directive('tmPagination',[function(){
@@ -368,7 +368,239 @@ module.exports = angular.module('tm.pagination',[]).directive('tmPagination',[fu
         }
     };
 }]);
-},{"angular":11}],6:[function(require,module,exports){
+},{"angular":12}],6:[function(require,module,exports){
+angular.module('cgBusy',[]);
+
+//loosely modeled after angular-promise-tracker
+angular.module('cgBusy').factory('_cgBusyTrackerFactory',['$timeout','$q',function($timeout,$q){
+
+	return function(){
+
+		var tracker = {};
+		tracker.promises = [];
+		tracker.delayPromise = null;
+		tracker.durationPromise = null;
+        tracker.delayJustFinished = false;
+
+		tracker.reset = function(options){
+			tracker.minDuration = options.minDuration;
+
+			tracker.promises = [];
+			angular.forEach(options.promises,function(p){
+				if (!p || p.$cgBusyFulfilled) {
+					return;
+				}
+				addPromiseLikeThing(p);
+			});
+
+			if (tracker.promises.length === 0) {
+				//if we have no promises then dont do the delay or duration stuff
+				return;
+			}
+
+            tracker.delayJustFinished = false;
+			if (options.delay) {
+				tracker.delayPromise = $timeout(function(){
+					tracker.delayPromise = null;
+                    tracker.delayJustFinished = true;
+				},parseInt(options.delay,10));
+			}
+            if (options.minDuration) {
+                tracker.durationPromise = $timeout(function(){
+                    tracker.durationPromise = null;
+                },parseInt(options.minDuration,10) + (options.delay ? parseInt(options.delay,10) : 0));
+            }            
+		};
+
+		tracker.getThen = function(promise){
+			var then = promise && (promise.then || promise.$then ||
+	        	(promise.$promise && promise.$promise.then));
+
+            if (promise.denodeify) {
+                return $q.when(promise).then;
+            }
+
+			return then;
+		};
+
+		var addPromiseLikeThing = function(promise){
+			var then = tracker.getThen(promise);
+
+			if (!then) {
+				throw new Error('cgBusy expects a promise (or something that has a .promise or .$promise');
+			}
+
+			if (tracker.promises.indexOf(promise) !== -1){
+				return;
+			}
+			tracker.promises.push(promise);
+
+			then(function(){
+				promise.$cgBusyFulfilled = true;
+				if (tracker.promises.indexOf(promise) === -1) {
+					return;
+				}
+				tracker.promises.splice(tracker.promises.indexOf(promise),1);
+			},function(){
+				promise.$cgBusyFulfilled = true;
+				if (tracker.promises.indexOf(promise) === -1) {
+					return;
+				}
+				tracker.promises.splice(tracker.promises.indexOf(promise),1);
+			});
+		};
+
+		tracker.active = function(){
+			if (tracker.delayPromise){
+				return false;
+			}
+
+            if (!tracker.delayJustFinished){
+                if (tracker.durationPromise){
+                    return true;
+                }
+                return tracker.promises.length > 0;
+            } else {
+                //if both delay and min duration are set, 
+                //we don't want to initiate the min duration if the 
+                //promise finished before the delay was complete
+                tracker.delayJustFinished = false;
+                return tracker.promises.length > 0;
+            }
+		};
+
+		return tracker;
+
+	};
+}]);
+
+angular.module('cgBusy').value('cgBusyDefaults',{});
+
+angular.module('cgBusy').directive('cgBusy',['$compile','$templateCache','cgBusyDefaults','$http','_cgBusyTrackerFactory',
+	function($compile,$templateCache,cgBusyDefaults,$http,_cgBusyTrackerFactory){
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs, fn) {
+
+				//Apply position:relative to parent element if necessary
+				var position = element.css('position');
+				if (position === 'static' || position === '' || typeof position === 'undefined'){
+					element.css('position','relative');
+				}
+
+				var templateElement;
+                var backdropElement;
+				var currentTemplate;
+				var templateScope;
+				var backdrop;
+				var tracker = _cgBusyTrackerFactory();
+
+				var defaults = {
+					templateUrl: 'angular-busy.html',
+					delay:0,
+					minDuration:0,
+					backdrop: true,
+					message:'Please Wait...'
+				};
+
+				angular.extend(defaults,cgBusyDefaults);
+
+				scope.$watchCollection(attrs.cgBusy,function(options){
+
+					if (!options) {
+						options = {promise:null};
+					}
+
+					if (angular.isString(options)) {
+						throw new Error('Invalid value for cg-busy.  cgBusy no longer accepts string ids to represent promises/trackers.');
+					}
+
+					//is it an array (of promises) or one promise
+					if (angular.isArray(options) || tracker.getThen(options)) {
+						options = {promise:options};
+					}
+
+					options = angular.extend(angular.copy(defaults),options);
+
+					if (!options.templateUrl){
+						options.templateUrl = defaults.templateUrl;
+					}
+
+					if (!angular.isArray(options.promise)){
+						options.promise = [options.promise];
+					}
+
+					// options.promise = angular.isArray(options.promise) ? options.promise : [options.promise];
+					// options.message = options.message ? options.message : 'Please Wait...';
+					// options.template = options.template ? options.template : cgBusyTemplateName;
+					// options.minDuration = options.minDuration ? options.minDuration : 0;
+					// options.delay = options.delay ? options.delay : 0;
+
+					if (!templateScope) {
+						templateScope = scope.$new();
+					}
+
+					templateScope.$message = options.message;
+
+					if (!angular.equals(tracker.promises,options.promise)) {
+						tracker.reset({
+							promises:options.promise,
+							delay:options.delay,
+							minDuration: options.minDuration
+						});
+					}
+
+					templateScope.$cgBusyIsActive = function() {
+						return tracker.active();
+					};
+
+
+					if (!templateElement || currentTemplate !== options.templateUrl || backdrop !== options.backdrop) {
+
+						if (templateElement) {
+							templateElement.remove();
+						}
+                        if (backdropElement){
+                            backdropElement.remove();
+                        }
+
+						currentTemplate = options.templateUrl;
+						backdrop = options.backdrop;
+
+						$http.get(currentTemplate,{cache: $templateCache}).success(function(indicatorTemplate){
+
+							options.backdrop = typeof options.backdrop === 'undefined' ? true : options.backdrop;
+
+                            if (options.backdrop){
+                                var backdrop = '<div class="cg-busy cg-busy-backdrop cg-busy-backdrop-animation ng-hide" ng-show="$cgBusyIsActive()"></div>';
+                                backdropElement = $compile(backdrop)(templateScope);
+                                element.append(backdropElement);
+                            }
+
+							var template = '<div class="cg-busy cg-busy-animation ng-hide" ng-show="$cgBusyIsActive()">' + indicatorTemplate + '</div>';
+							templateElement = $compile(template)(templateScope);
+
+							angular.element(templateElement.children()[0])
+								.css('position','absolute')
+								.css('top',0)
+								.css('left',0)
+								.css('right',0)
+								.css('bottom',0);
+							element.append(templateElement);
+
+						}).error(function(data){
+							throw new Error('Template specified for cgBusy ('+options.templateUrl+') could not be loaded. ' + data);
+						});
+					}
+
+				},true);
+			}
+		};
+	}
+	]);
+
+
+},{}],7:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1361,11 +1593,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":6}],8:[function(require,module,exports){
+},{"./angular-route":7}],9:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -8247,12 +8479,12 @@ angular.module('ui.bootstrap.carousel').run(function() {!angular.$$csp().noInlin
 angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">.uib-datepicker .uib-title{width:100%;}.uib-day button,.uib-month button,.uib-year button{min-width:100%;}.uib-datepicker-popup.dropdown-menu{display:block;}.uib-button-bar{padding:10px 9px 2px;}</style>'); });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); });
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":8}],10:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":9}],11:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37271,8 +37503,8 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":10}]},{},[1]);
+},{"./angular":11}]},{},[1]);
