@@ -175,11 +175,11 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
 
 var angular = require("angular");
 
-module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap'),require('angular-busy/dist/angular-busy.min').name,require("./../widget/pagination").name]);
+module.exports = angular.module('branchApp.goods',[require('angular-ui-bootstrap'),require('./../../node_modules/angular-busy/dist/angular-busy.min').name,require("./../widget/pagination").name]);
 
 require('./search');
 require('./goodList');
-},{"./../widget/pagination":5,"./goodList":2,"./search":4,"angular":12,"angular-busy/dist/angular-busy.min":6,"angular-ui-bootstrap":10}],4:[function(require,module,exports){
+},{"./../../node_modules/angular-busy/dist/angular-busy.min":6,"./../widget/pagination":5,"./goodList":2,"./search":4,"angular":12,"angular-ui-bootstrap":10}],4:[function(require,module,exports){
 'use strict';
 
 var angular = require("angular");
