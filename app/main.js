@@ -38,6 +38,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     $scope.hasData = true;
     $scope.item = null;
     $scope.keyword = $routeParams.keyword;
+    var lastKey = $routeParams.keyword;
     $scope.myPromise = null;
 
     $scope.paginationConf = {
@@ -54,8 +55,9 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     var getGoodList = function () {
         var key = encodeURIComponent($scope.keyword);
         var page;
-        if($scope.keyword !== $routeParams.keyword){
+        if($scope.keyword !== lastKey){
             page = 1;
+            $scope.paginationConf.currentPage = 1;
         }else{
             page = $scope.paginationConf.currentPage;
         }
