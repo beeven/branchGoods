@@ -150,7 +150,7 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
 
 m.filter('Percent',function(){
     return function (input){
-        if(!isNaN(input)) {
+        if(!isNaN(input) && input !== 0) {
             return (Math.round(input * 10000) / 100).toFixed(2) + '%';
         }else{
             return 0;
