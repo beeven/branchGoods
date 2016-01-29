@@ -5,7 +5,7 @@
         </div>
         <form class="fm">
             <span class="s_ipt_wr">
-                <input class="s_ipt" type="text" ng-model="keyword" id="keyword" name="keyword">
+                <input class="s_ipt" type="text" ng-model="keyword" ng-keydown="myKeyup($event)" id="keyword" name="keyword">
             </span>
             <span class="s_btn_wr">
                 <input class="s_btn" type="button" ng-click="search()" value="搜索">

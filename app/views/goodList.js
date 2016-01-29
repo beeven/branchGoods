@@ -147,3 +147,9 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
 
     //$scope.$watch('item', getGoodPhoto);
 });
+
+m.filter('Percent',function(){
+    return function (input){
+        return (Math.round(input * 10000)/100).toFixed(2) + '%';
+    };
+});

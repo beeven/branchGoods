@@ -34,18 +34,18 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-4">
-                            进口最惠国税率：<span>{{item.LOW_RATE}}</span>
+                            进口最惠国税率：<span ng-show="item.LOW_RATE != 0">{{item.LOW_RATE | Percent}}</span>
                         </div>
                         <div class="col-sm-4">
-                            进口增值税率：<span>{{item.TAX_RATE}}</span>
+                            进口增值税率：<span ng-show="item.TAX_RATE != 0">{{item.TAX_RATE | Percent}}</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-4">
-                            出口(暂定)税率：<span ng-show="item.REG_RATE != 0">{{item.REG_RATE}}</span>
+                            出口(暂定)税率：<span ng-show="item.REG_RATE != 0">{{item.REG_RATE | Percent}}</span>
                         </div>
                         <div class="col-sm-4">
-                            出口退税税率：<span ng-show="item.OUT_RATE != 0">{{item.OUT_RATE}}</span>
+                            出口退税税率：<span ng-show="item.OUT_RATE != 0">{{item.OUT_RATE | Percent}}</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -87,7 +87,7 @@
                     <a ng-click="open(good.GOODS_ID)">
                         <h3><b>{{good.G_NAME}}</b></h3>
                         <!--<img src="" ng-src="{{good.img}}" class="img-thumbnail">-->
-                        <span>商品编码：{{good.CODE_TS}}</span>
+                        <span>商品编码：{{good.CODE_TS}}</span><br>
                         <span>商品描述：{{good.GOODS_DESC}}</span>
                     </a>
                 </li>
