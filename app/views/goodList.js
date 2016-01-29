@@ -123,7 +123,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
 });
 
 m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, item) {
-    $scope.myInterval = 5000;
+    $scope.myInterval = 3000;
     $scope.noWrapSlides = false;
     $scope.item = item;
     console.log(item);
@@ -153,7 +153,7 @@ m.filter('Percent',function(){
         if(!isNaN(input)) {
             return (Math.round(input * 10000) / 100).toFixed(2) + '%';
         }else{
-            return null;
+            return 0;
         }
     };
 });
