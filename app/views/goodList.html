@@ -23,33 +23,33 @@
                         </uib-carousel>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-8">
+                        <div class="col-sm-9">
                             <span>商品编码：{{item.CODE_TS}}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-8">
+                        <div class="col-sm-9">
                             <span>商品名称：{{item.G_NAME}}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-4">
-                            进口最惠国税率：<span ng-show="item.LOW_RATE != undefined">{{item.LOW_RATE | Percent}}</span>
+                        <div class="col-sm-5">
+                            进口最惠国税率：<span ng-show="item.LOW_RATE != undefined && item.LOW_RATE != 0">{{item.LOW_RATE | Percent}}</span>
                         </div>
-                        <div class="col-sm-4">
-                            进口增值税率：<span ng-show="item.TAX_RATE != undefined">{{item.TAX_RATE | Percent}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-4">
-                            出口(暂定)税率：<span ng-show="item.REG_RATE != undefined">{{item.REG_RATE | Percent}}</span>
-                        </div>
-                        <div class="col-sm-4">
-                            出口退税税率：<span ng-show="item.OUT_RATE != 0">{{item.OUT_RATE | Percent}}</span>
+                        <div class="col-sm-5">
+                            进口增值税率：<span ng-show="item.TAX_RATE != undefined && item.TAX_RATE != 0">{{item.TAX_RATE | Percent}}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-8">
+                        <div class="col-sm-5">
+                            出口(暂定)税率：<span ng-show="item.REG_RATE != undefined && item.REG_RATE != 0">{{item.REG_RATE | Percent}}</span>
+                        </div>
+                        <div class="col-sm-5">
+                            出口退税税率：<span ng-show="item.OUT_RATE != undefined && item.REG_RATE != 0">{{item.OUT_RATE | Percent}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
                             <span>规范申报要素：{{item.HS_POINTS}}</span>
                         </div>
                     </div>
