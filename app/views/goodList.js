@@ -4,7 +4,7 @@ var angular = require("angular");
 
 var m = angular.module('branchApp.goods');
 
-m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams, $q, $window){
+m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams, $q, $window, $location){
     //$scope.currentPage = 1;
     //$scope.itemsPerPage = 0;
     $scope.hasData = true;
@@ -28,8 +28,8 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         var key = encodeURIComponent($scope.keyword);
         var page;
         if($scope.keyword !== lastKey){
-            page = 1;
-            $scope.paginationConf.currentPage = 1;
+            $location.url("/goodList/" + $scope.keyword);
+            $scope.url = $location.url();
         }else{
             page = $scope.paginationConf.currentPage;
         }
