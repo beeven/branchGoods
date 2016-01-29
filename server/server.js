@@ -1,6 +1,7 @@
 "use strict";
 
 var express = require('express'),
+    compression = require('compression'),
     app = express(),
     request = require('request'),
     bodyParser = require('body-parser'),
@@ -8,6 +9,7 @@ var express = require('express'),
 
 app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 //console.log(__dirname + "/../app/");
+app.use(compression());
 app.use(express.static(__dirname+"/../app/"));
 app.use(bodyParser.json());
 

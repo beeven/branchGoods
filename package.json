@@ -12,6 +12,7 @@
     "angular-busy": "^4.1.0",
     "body-parser": "^1.14.2",
     "browserify": "^13.0.0",
+    "compression": "^1.6.1",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
     "q": "^1.4.1",
