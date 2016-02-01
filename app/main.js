@@ -97,21 +97,22 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         return defer.promise;
     };
 
-    var getBigImg = function (code) {
+    /*var getBigImg = function (code) {
         var defer = $q.defer();
         $http.get("./getGoodPhoto/" + code)
             .then(function (response) {
                 console.log(response);
-                if(response.data.code === 0){
+                /!*if(response.data.code === 0){
                     defer.resolve(response.data.data);
                 }else{
                     defer.reject();
-                }
+                }*!/
+                defer.resolve(response.data);
             }, function () {
                 defer.reject();
             });
         return defer.promise;
-    };
+    };*/
 
     /*$scope.range = function (start, end) {
         var ret = [];
@@ -162,9 +163,9 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     };
 
     $scope.openImg = function (code) {
-        getBigImg(code).then(function (data) {
+        //getBigImg(code).then(function (data) {
             //console.log(data);
-            $scope.item = "1";
+            $scope.item = "./getGoodPhoto/" + code;
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
@@ -175,7 +176,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
                     }
                 }
             });
-        });
+        //});
     };
 
     $scope.search = function(){
