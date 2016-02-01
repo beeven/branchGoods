@@ -8,6 +8,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     //$scope.currentPage = 1;
     //$scope.itemsPerPage = 0;
     $scope.hasData = true;
+    $scope.showDetail = false;
     $scope.item = null;
     $scope.keyword = $routeParams.keyword;
     var lastKey = $routeParams.keyword;
@@ -35,9 +36,9 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
         }
         $scope.myPromise = $http.get("./getBranchGoods/" + key+ "/" + page + "/" + $scope.paginationConf.itemsPerPage)
             .then(function (response) {
-                console.log(response);
+                //console.log(response);
                 if(response.data.code === 0){
-                    console.log(response.data.data[0].TOTAL_ROWS);
+                    //console.log(response.data.data[0].TOTAL_ROWS);
                     $scope.goods = response.data.data;
                     $scope.paginationConf.totalItems = response.data.data[0].TOTAL_ROWS;
                     //$scope.goods = [{"guid":"1234","GOODS_ORDER_NO":"4200001235","CODE_TS":"2907121100","G_NAME":"间甲酚（m-cresol;m-hydroxytoluene;m-methylphenol）","GOODS_DESC":"无色或淡黄色可燃液体, 有苯酚的气味, 在空气中遇光逐渐变色。密度(20)1.0344, 熔点10.9℃, 沸点202.8℃, 闪点94.44℃, 自燃点558.9℃；溶于约40倍的水，溶于苛性碱液和常用有机溶剂。\r\n用途：用于消毒剂、油漆、农药等, 也是电影胶片的重要原料。并可用以制造树脂、增塑剂和香料等。\r\n"},
@@ -55,6 +56,22 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     var getGoodDetail = function (code) {
         var defer = $q.defer();
         $http.get("./getBranchDetail/" + code)
+            .then(function (response) {
+                console.log(response);
+                if(response.data.code === 0){
+                    defer.resolve(response.data.data);
+                }else{
+                    defer.reject();
+                }
+            }, function () {
+                defer.reject();
+            });
+        return defer.promise;
+    };
+
+    var getBigImg = function (code) {
+        var defer = $q.defer();
+        $http.get("./getGoodPhoto/" + code)
             .then(function (response) {
                 console.log(response);
                 if(response.data.code === 0){
@@ -101,6 +118,24 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
 
     $scope.open = function (code) {
         getGoodDetail(code).then(function (data) {
+            $scope.showDetail = true;
+            $scope.item = data;
+            /*var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: 'lg',
+                resolve: {
+                    item: function () {
+                        return $scope.item;
+                    }
+                }
+            });*/
+        });
+    };
+
+    $scope.openImg = function (code) {
+        getBigImg(code).then(function (data) {
+            console.log(data);
             $scope.item = data;
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent.html',
@@ -126,7 +161,7 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
     $scope.myInterval = 3000;
     $scope.noWrapSlides = false;
     $scope.item = item;
-    console.log(item);
+    //console.log(item);
 
     /*var getGoodPhoto = function () {
         $http.get("./getGoodPhoto/" + item.guid)
@@ -144,7 +179,6 @@ m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, ite
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-
     //$scope.$watch('item', getGoodPhoto);
 });
 

@@ -42,25 +42,38 @@
 
   .list
     margin 20px 0 0 40px
-    li
-      display inline-block
-      vertical-align text-bottom
-      overflow hidden
-      white-space nowrap
-      text-overflow ellipsis
-      width 60%
-      margin-bottom 14px
-      a
-        cursor pointer
-        text-decoration none
-      &:hover, &:visited, &:focus
-        cursor pointer
-        text-decoration none
-      h3
-        color #1a70ae
-      span
-        line-height 20px
-        color #000000
+    .detail
+      margin 0 40px 0 0
+      float right
+      width 40%
+      .goodsCarousel
+        float left
+        width 50%
+      .goodsRow
+        float right
+        width 45%
+    .goods
+      float left
+      width 50%
+      li
+        display inline-block
+        vertical-align text-bottom
+        overflow hidden
+        white-space nowrap
+        text-overflow ellipsis
+        width 100%
+        margin-bottom 14px
+        a
+          cursor pointer
+          text-decoration none
+          &:hover, &:visited, &:focus
+            cursor pointer
+            text-decoration none
+        h3
+          color #1a70ae
+        span
+          line-height 20px
+          color #000000
     /*
     .pagination
       padding 0 0 0 121px
