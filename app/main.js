@@ -165,14 +165,14 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
     $scope.openImg = function (code) {
         //getBigImg(code).then(function (data) {
             //console.log(data);
-            $scope.item = "./getGoodPhoto/" + code;
+            $scope.img = "./getGoodPhoto/" + code;
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
                 size: 'lg',
                 resolve: {
                     item: function () {
-                        return $scope.item;
+                        return $scope.img;
                     }
                 }
             });
@@ -189,7 +189,7 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
 m.controller('ModalInstanceCtrl',function ($scope, $http, $uibModalInstance, item) {
     $scope.myInterval = 3000;
     $scope.noWrapSlides = false;
-    $scope.item = item;
+    $scope.img = item;
     //console.log(item);
 
     /*var getGoodPhoto = function () {
