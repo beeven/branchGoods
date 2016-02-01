@@ -135,8 +135,8 @@ m.controller('goodList.MainCtrl',function($scope, $http, $uibModal, $routeParams
 
     $scope.openImg = function (code) {
         getBigImg(code).then(function (data) {
-            console.log(data);
-            $scope.item = data;
+            //console.log(data);
+            $scope.item = "1";
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
